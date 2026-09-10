@@ -1,0 +1,7218 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bar do Jaum — Delivery AI Agent</title>
+
+<meta
+    name="description"
+    content="Bar do Jaum — Delivery AI Agent. Agente conversacional para delivery de bebidas com IA, workflow determinístico, estoque em tempo real e aprovação humana."
+>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+
+
+<style>
+
+    :root {
+
+        --bg: #0b0f14;
+        --bg-secondary: #111820;
+        --bg-card: #151d26;
+        --bg-code: #0d131a;
+        --border: #263241;
+
+        --text: #f2f5f7;
+        --muted: #9ba8b5;
+
+        --accent: #7dd3fc;
+        --accent-strong: #38bdf8;
+
+        --success: #86efac;
+        --warning: #fde68a;
+        --danger: #fca5a5;
+
+        /*
+         * UMA ÚNICA COR PARA TODAS AS TABELAS
+         */
+
+        --database-table: #182431;
+
+        /*
+         * UMA ÚNICA COR PARA TODAS AS LINHAS
+         */
+
+        --database-line: #38bdf8;
+
+        --max-width: 1180px;
+
+        --radius: 16px;
+
+    }
+
+
+    * {
+
+        box-sizing: border-box;
+
+        margin: 0;
+
+        padding: 0;
+
+    }
+
+
+    html {
+
+        scroll-behavior: smooth;
+
+    }
+
+
+    body {
+
+        background: var(--bg);
+
+        color: var(--text);
+
+        font-family:
+            Inter,
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+        line-height: 1.6;
+
+    }
+
+
+    a {
+
+        color: inherit;
+
+        text-decoration: none;
+
+    }
+
+
+    .container {
+
+        width:
+            min(
+                100% - 40px,
+                var(--max-width)
+            );
+
+        margin:
+            0 auto;
+
+    }
+
+
+    /* =====================================================
+       NAV
+       ===================================================== */
+
+    nav {
+
+        position:
+            sticky;
+
+        top:
+            0;
+
+        z-index:
+            100;
+
+        background:
+            rgba(11, 15, 20, .88);
+
+        backdrop-filter:
+            blur(14px);
+
+        border-bottom:
+            1px solid
+            rgba(255, 255, 255, .06);
+
+    }
+
+
+    .nav-content {
+
+        min-height:
+            68px;
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            space-between;
+
+        gap:
+            20px;
+
+    }
+
+
+    .brand {
+
+        color:
+            var(--text);
+
+        font-weight:
+            800;
+
+        letter-spacing:
+            -.02em;
+
+    }
+
+
+    .brand span {
+
+        color:
+            var(--accent-strong);
+
+    }
+
+
+    .nav-links {
+
+        display:
+            flex;
+
+        flex-wrap:
+            wrap;
+
+        gap:
+            18px;
+
+        color:
+            var(--muted);
+
+        font-size:
+            13px;
+
+    }
+
+
+    .nav-links a {
+
+        transition:
+            color .2s ease;
+
+    }
+
+
+    .nav-links a:hover {
+
+        color:
+            var(--text);
+
+    }
+
+
+    /* =====================================================
+       HERO
+       ===================================================== */
+
+    .hero {
+
+        padding:
+            110px 0 90px;
+
+    }
+
+
+    .hero-grid {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            1.1fr .9fr;
+
+        gap:
+            60px;
+
+        align-items:
+            center;
+
+    }
+
+
+    .eyebrow {
+
+        display:
+            inline-flex;
+
+        padding:
+            6px 11px;
+
+        border:
+            1px solid
+            rgba(56, 189, 248, .25);
+
+        border-radius:
+            999px;
+
+        color:
+            var(--accent);
+
+        background:
+            rgba(56, 189, 248, .06);
+
+        font-size:
+            12px;
+
+        font-weight:
+            700;
+
+        letter-spacing:
+            .04em;
+
+        text-transform:
+            uppercase;
+
+        margin-bottom:
+            22px;
+
+    }
+
+
+    .hero h1 {
+
+        font-size:
+            clamp(46px, 7vw, 82px);
+
+        line-height:
+            .98;
+
+        letter-spacing:
+            -.055em;
+
+        max-width:
+            800px;
+
+        margin-bottom:
+            26px;
+
+    }
+
+
+    .hero h1 span {
+
+        color:
+            var(--accent);
+
+    }
+
+
+    .hero-description {
+
+        color:
+            var(--muted);
+
+        font-size:
+            18px;
+
+        max-width:
+            720px;
+
+        margin-bottom:
+            30px;
+
+    }
+
+
+    .actions {
+
+        display:
+            flex;
+
+        flex-wrap:
+            wrap;
+
+        gap:
+            12px;
+
+    }
+
+
+    .btn {
+
+        display:
+            inline-flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+        padding:
+            11px 17px;
+
+        border-radius:
+            10px;
+
+        border:
+            1px solid
+            var(--border);
+
+        background:
+            var(--bg-card);
+
+        font-weight:
+            700;
+
+        font-size:
+            14px;
+
+        transition:
+            transform .2s ease,
+            border-color .2s ease,
+            background .2s ease;
+
+    }
+
+
+    .btn:hover {
+
+        transform:
+            translateY(-2px);
+
+        border-color:
+            #3b4d60;
+
+    }
+
+
+    .btn-primary {
+
+        background:
+            var(--accent-strong);
+
+        border-color:
+            var(--accent-strong);
+
+        color:
+            #061018;
+
+    }
+
+
+    .btn-primary:hover {
+
+        background:
+            #7dd3fc;
+
+        border-color:
+            #7dd3fc;
+
+    }
+
+
+    .terminal {
+
+        background:
+            #091017;
+
+        border:
+            1px solid
+            var(--border);
+
+        border-radius:
+            18px;
+
+        padding:
+            18px;
+
+        box-shadow:
+            0 24px 70px
+            rgba(0, 0, 0, .25);
+
+    }
+
+
+    .terminal-head {
+
+        display:
+            flex;
+
+        gap:
+            7px;
+
+        margin-bottom:
+            18px;
+
+    }
+
+
+    .terminal-dot {
+
+        width:
+            9px;
+
+        height:
+            9px;
+
+        border-radius:
+            50%;
+
+        background:
+            #334155;
+
+    }
+
+
+    .terminal-body {
+
+        font-family:
+            ui-monospace,
+            SFMono-Regular,
+            Menlo,
+            Consolas,
+            monospace;
+
+        font-size:
+            13px;
+
+        color:
+            #cbd5e1;
+
+    }
+
+
+    .terminal-line {
+
+        display:
+            flex;
+
+        gap:
+            10px;
+
+        padding:
+            7px 0;
+
+    }
+
+
+    .terminal-key {
+
+        color:
+            var(--accent);
+
+        min-width:
+            150px;
+
+    }
+
+
+    /* =====================================================
+       SECTIONS
+       ===================================================== */
+
+    section {
+
+        padding:
+            95px 0;
+
+        border-top:
+            1px solid
+            rgba(255, 255, 255, .05);
+
+    }
+
+
+    .section-kicker {
+
+        color:
+            var(--accent-strong);
+
+        font-size:
+            12px;
+
+        font-weight:
+            800;
+
+        letter-spacing:
+            .08em;
+
+        text-transform:
+            uppercase;
+
+        margin-bottom:
+            10px;
+
+    }
+
+
+    .section-title {
+
+        font-size:
+            clamp(30px, 4vw, 48px);
+
+        letter-spacing:
+            -.04em;
+
+        line-height:
+            1.08;
+
+        margin-bottom:
+            18px;
+
+    }
+
+
+    .section-description {
+
+        color:
+            var(--muted);
+
+        max-width:
+            760px;
+
+        margin-bottom:
+            38px;
+
+    }
+
+
+    /* =====================================================
+       CARDS
+       ===================================================== */
+
+    .cards {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap:
+            18px;
+
+    }
+
+
+    .card {
+
+        background:
+            var(--bg-card);
+
+        border:
+            1px solid
+            var(--border);
+
+        border-radius:
+            var(--radius);
+
+        padding:
+            25px;
+
+        transition:
+            transform .2s ease,
+            border-color .2s ease;
+
+    }
+
+
+    .card:hover {
+
+        transform:
+            translateY(-3px);
+
+        border-color:
+            #34485c;
+
+    }
+
+
+    .card-number {
+
+        color:
+            var(--accent-strong);
+
+        font-family:
+            ui-monospace,
+            monospace;
+
+        font-size:
+            12px;
+
+        margin-bottom:
+            25px;
+
+    }
+
+
+    .card h3 {
+
+        margin-bottom:
+            10px;
+
+        font-size:
+            19px;
+
+    }
+
+
+    .card p {
+
+        color:
+            var(--muted);
+
+        font-size:
+            14px;
+
+    }
+
+
+    /* =====================================================
+       PERSONAS
+       ===================================================== */
+
+    .persona-grid {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap:
+            18px;
+
+    }
+
+
+    .persona {
+
+        background:
+            linear-gradient(
+                145deg,
+                #151d26,
+                #101720
+            );
+
+        border:
+            1px solid
+            var(--border);
+
+        border-radius:
+            var(--radius);
+
+        padding:
+            28px;
+
+    }
+
+
+    .persona-tag {
+
+        color:
+            var(--accent);
+
+        font-size:
+            12px;
+
+        font-weight:
+            800;
+
+        text-transform:
+            uppercase;
+
+        margin-bottom:
+            12px;
+
+    }
+
+
+    .persona h3 {
+
+        font-size:
+            24px;
+
+        margin-bottom:
+            10px;
+
+    }
+
+
+    .persona p {
+
+        color:
+            var(--muted);
+
+    }
+
+
+    /* =====================================================
+       GOLDEN RULE
+       ===================================================== */
+
+    .rule-grid {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap:
+            18px;
+
+    }
+
+
+    .rule {
+
+        padding:
+            30px;
+
+        border-radius:
+            var(--radius);
+
+        border:
+            1px solid
+            var(--border);
+
+        background:
+            var(--bg-card);
+
+    }
+
+
+    .rule.llm {
+
+        border-color:
+            rgba(125, 211, 252, .25);
+
+    }
+
+
+    .rule.code {
+
+        border-color:
+            rgba(134, 239, 172, .22);
+
+    }
+
+
+    .rule h3 {
+
+        margin-bottom:
+            14px;
+
+    }
+
+
+    .rule p,
+    .rule li {
+
+        color:
+            var(--muted);
+
+    }
+
+
+    .rule ul {
+
+        padding-left:
+            18px;
+
+    }
+
+
+    /* =====================================================
+       MERMAID — FLUXOS
+       ===================================================== */
+
+    .diagram-container {
+
+        background:
+            linear-gradient(
+                145deg,
+                #101821,
+                #0d141c
+            );
+
+        border:
+            1px solid
+            #2b3948;
+
+        border-radius:
+            18px;
+
+        padding:
+            28px;
+
+        overflow-x:
+            auto;
+
+    }
+
+
+    .diagram-title {
+
+        color:
+            #f2f5f7;
+
+        font-weight:
+            700;
+
+        font-size:
+            16px;
+
+        margin-bottom:
+            22px;
+
+    }
+
+
+    /*
+     * Centralização horizontal.
+     */
+
+    .diagram-container .mermaid,
+    .database-diagram .mermaid {
+
+        width:
+            fit-content;
+
+        min-width:
+            720px;
+
+        margin-left:
+            auto;
+
+        margin-right:
+            auto;
+
+    }
+
+
+    .mermaid svg {
+
+        display:
+            block;
+
+        margin-left:
+            auto;
+
+        margin-right:
+            auto;
+
+        max-width:
+            none;
+
+    }
+
+
+    /* =====================================================
+       MODELO RELACIONAL
+       ===================================================== */
+
+    .database-diagram {
+
+        background:
+            linear-gradient(
+                145deg,
+                #101821,
+                #0d141c
+            );
+
+        border:
+            1px solid
+            #2b3948;
+
+        border-radius:
+            18px;
+
+        padding:
+            34px;
+
+        overflow-x:
+            auto;
+
+        box-shadow:
+            inset 0 1px 0
+            rgba(255, 255, 255, .025),
+
+            0 20px 60px
+            rgba(0, 0, 0, .18);
+
+    }
+
+
+    .database-diagram .mermaid {
+
+        color:
+            #ffffff;
+
+    }
+
+
+    .database-diagram .mermaid svg {
+
+        background:
+            transparent !important;
+
+    }
+
+
+    /* =====================================================
+       TABELAS DO MODELO RELACIONAL
+       ===================================================== */
+
+    .database-diagram .mermaid svg
+    .er rect.entityBox,
+
+    .database-diagram .mermaid svg
+    .er rect.attributeBoxOdd,
+
+    .database-diagram .mermaid svg
+    .er rect.attributeBoxEven,
+
+    .database-diagram .mermaid svg
+    .er rect.row-rect-odd,
+
+    .database-diagram .mermaid svg
+    .er rect.row-rect-even,
+
+    .database-diagram .mermaid svg
+    rect.entityBox,
+
+    .database-diagram .mermaid svg
+    rect.attributeBoxOdd,
+
+    .database-diagram .mermaid svg
+    rect.attributeBoxEven,
+
+    .database-diagram .mermaid svg
+    rect.row-rect-odd,
+
+    .database-diagram .mermaid svg
+    rect.row-rect-even {
+
+        fill:
+            var(--database-table) !important;
+
+        background:
+            var(--database-table) !important;
+
+    }
+
+
+    .database-diagram .mermaid svg
+    .er.entityBox,
+
+    .database-diagram .mermaid svg
+    .entityBox {
+
+        fill:
+            var(--database-table) !important;
+
+        stroke:
+            var(--database-line) !important;
+
+        stroke-width:
+            2px !important;
+
+    }
+
+
+    .database-diagram .mermaid svg
+    .attributeBoxOdd,
+
+    .database-diagram .mermaid svg
+    .attributeBoxEven,
+
+    .database-diagram .mermaid svg
+    .row-rect-odd,
+
+    .database-diagram .mermaid svg
+    .row-rect-even {
+
+        fill:
+            var(--database-table) !important;
+
+        background:
+            var(--database-table) !important;
+
+        stroke:
+            none !important;
+
+        stroke-width:
+            0 !important;
+
+    }
+
+
+    .database-diagram .mermaid svg
+    .er rect:not(.relationshipLabelBox) {
+
+        fill:
+            var(--database-table) !important;
+
+        background:
+            var(--database-table) !important;
+
+    }
+
+
+    .database-diagram .mermaid svg
+    .er .entityLabel,
+
+    .database-diagram .mermaid svg
+    .er .entityLabel text {
+
+        fill:
+            #ffffff !important;
+
+        color:
+            #ffffff !important;
+
+        font-weight:
+            800 !important;
+
+        opacity:
+            1 !important;
+
+    }
+
+
+    .database-diagram .mermaid svg
+    .er .attributeLabel,
+
+    .database-diagram .mermaid svg
+    .er .attributeLabel text,
+
+    .database-diagram .mermaid svg
+    .er .attributeBoxOdd text,
+
+    .database-diagram .mermaid svg
+    .er .attributeBoxEven text {
+
+        fill:
+            #ffffff !important;
+
+        color:
+            #ffffff !important;
+
+        font-weight:
+            600 !important;
+
+        opacity:
+            1 !important;
+
+    }
+
+
+    .database-diagram .mermaid svg
+    .er .key,
+
+    .database-diagram .mermaid svg
+    .er .keyType {
+
+        fill:
+            var(--database-line) !important;
+
+        color:
+            var(--database-line) !important;
+
+        font-weight:
+            800 !important;
+
+    }
+
+
+    /* =====================================================
+       RELACIONAMENTOS
+       ===================================================== */
+
+    .database-diagram .mermaid svg
+    .er .relationshipLine,
+
+    .database-diagram .mermaid svg
+    .relationshipLine,
+
+    .database-diagram .mermaid svg
+    path.relationshipLine,
+
+    .database-diagram .mermaid svg
+    line.relationshipLine,
+
+    .database-diagram .mermaid svg
+    polyline.relationshipLine {
+
+        stroke:
+            var(--database-line) !important;
+
+        stroke-width:
+            2px !important;
+
+        fill:
+            none !important;
+
+        opacity:
+            1 !important;
+
+    }
+
+
+    .database-diagram .mermaid svg
+    .er path.relationshipLine,
+
+    .database-diagram .mermaid svg
+    .er line.relationshipLine,
+
+    .database-diagram .mermaid svg
+    .er polyline.relationshipLine {
+
+        stroke:
+            var(--database-line) !important;
+
+        stroke-width:
+            2px !important;
+
+        fill:
+            none !important;
+
+        opacity:
+            1 !important;
+
+    }
+
+
+    .database-diagram .mermaid svg
+    .er .relationshipLabel,
+
+    .database-diagram .mermaid svg
+    .er .relationshipLabel text {
+
+        fill:
+            #ffffff !important;
+
+        color:
+            #ffffff !important;
+
+        opacity:
+            1 !important;
+
+    }
+
+
+    .database-diagram .mermaid svg
+    .er .relationshipLabelBox {
+
+        fill:
+            #101821 !important;
+
+        stroke:
+            var(--database-line) !important;
+
+        stroke-width:
+            1px !important;
+
+    }
+
+
+    /* =====================================================
+       FLOW
+       ===================================================== */
+
+    .flow {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+        gap:
+            14px;
+
+    }
+
+
+    .flow-item {
+
+        background:
+            var(--bg-card);
+
+        border:
+            1px solid
+            var(--border);
+
+        border-radius:
+            14px;
+
+        padding:
+            20px;
+
+    }
+
+
+    .flow-number {
+
+        color:
+            var(--accent-strong);
+
+        font-size:
+            11px;
+
+        font-family:
+            ui-monospace,
+            monospace;
+
+        margin-bottom:
+            10px;
+
+    }
+
+
+    .flow-item h3 {
+
+        font-size:
+            16px;
+
+        margin-bottom:
+            7px;
+
+    }
+
+
+    .flow-item p {
+
+        color:
+            var(--muted);
+
+        font-size:
+            13px;
+
+    }
+
+
+    /* =====================================================
+       DATABASE
+       ===================================================== */
+
+    .database-layout {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            .8fr 1.2fr;
+
+        gap:
+            18px;
+
+    }
+
+
+    .database-list,
+    .database-info {
+
+        background:
+            var(--bg-card);
+
+        border:
+            1px solid
+            var(--border);
+
+        border-radius:
+            var(--radius);
+
+        padding:
+            26px;
+
+    }
+
+
+    .database-list h3,
+    .database-info h3 {
+
+        margin-bottom:
+            18px;
+
+    }
+
+
+    .schema-item {
+
+        display:
+            block;
+
+        padding:
+            11px 0;
+
+        border-bottom:
+            1px solid
+            rgba(255, 255, 255, .05);
+
+        color:
+            var(--accent);
+
+        font-family:
+            ui-monospace,
+            monospace;
+
+        font-size:
+            13px;
+
+    }
+
+
+    .schema-item:last-child {
+
+        border-bottom:
+            none;
+
+    }
+
+
+    .database-info p {
+
+        color:
+            var(--muted);
+
+        margin-bottom:
+            14px;
+
+    }
+
+
+    .database-info ul {
+
+        padding-left:
+            18px;
+
+        color:
+            var(--muted);
+
+    }
+
+
+    /* =====================================================
+       ADR
+       ===================================================== */
+
+    .adr-principle {
+
+        border:
+            1px solid
+            rgba(56, 189, 248, .25);
+
+        background:
+            linear-gradient(
+                145deg,
+                #10202c,
+                #0e1821
+            );
+
+        border-radius:
+            18px;
+
+        padding:
+            28px;
+
+    }
+
+
+    .adr-principle-label {
+
+        color:
+            var(--accent-strong);
+
+        font-size:
+            11px;
+
+        font-weight:
+            800;
+
+        letter-spacing:
+            .08em;
+
+        text-transform:
+            uppercase;
+
+        margin-bottom:
+            12px;
+
+    }
+
+
+    .adr-principle-text {
+
+        font-size:
+            clamp(20px, 3vw, 30px);
+
+        line-height:
+            1.25;
+
+        letter-spacing:
+            -.025em;
+
+    }
+
+
+    .adr-principle-text span {
+
+        color:
+            var(--accent);
+
+    }
+
+
+    /* =====================================================
+       CHAT
+       ===================================================== */
+
+    .chat {
+
+        max-width:
+            850px;
+
+        margin:
+            0 auto;
+
+        background:
+            #0c1218;
+
+        border:
+            1px solid
+            var(--border);
+
+        border-radius:
+            20px;
+
+        padding:
+            22px;
+
+    }
+
+
+    .message {
+
+        max-width:
+            78%;
+
+        padding:
+            13px 15px;
+
+        border-radius:
+            14px;
+
+        margin:
+            10px 0;
+
+        font-size:
+            14px;
+
+    }
+
+
+    .message.client {
+
+        margin-right:
+            auto;
+
+        background:
+            #17212b;
+
+        border:
+            1px solid
+            #263241;
+
+    }
+
+
+    .message.agent {
+
+        margin-left:
+            auto;
+
+        background:
+            #102333;
+
+        border:
+            1px solid
+            rgba(56, 189, 248, .2);
+
+    }
+
+
+    .message small {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        opacity: 0.65;
+    }
+
+    .message.client small {
+    text-align: right;
+    }
+
+    .message.agent small {
+        text-align: left;
+    }
+
+    .message p {
+        margin: 0 0 10px;
+    }
+
+    .message p:last-child {
+        margin-bottom: 0;
+    }
+
+
+    /* =====================================================
+       CODE
+       ===================================================== */
+
+    .code-block {
+
+        background:
+            var(--bg-code);
+
+        border:
+            1px solid
+            var(--border);
+
+        border-radius:
+            16px;
+
+        padding:
+            24px;
+
+        overflow-x:
+            auto;
+
+    }
+
+
+    pre {
+
+        font-family:
+            ui-monospace,
+            SFMono-Regular,
+            Menlo,
+            Consolas,
+            monospace;
+
+        font-size:
+            13px;
+
+        line-height:
+            1.7;
+
+        color:
+            #dbeafe;
+
+    }
+
+
+    /* =====================================================
+       VIDEO
+       ===================================================== */
+
+    .video-card {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border-radius: 16px;
+    }
+
+    .video-card iframe {
+        width: 100%;
+        height: 100%;
+        display: block;
+        border: 0;
+    }
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    footer {
+
+        padding:
+            60px 0;
+
+        border-top:
+            1px solid
+            var(--border);
+
+        color:
+            var(--muted);
+
+    }
+
+
+    .footer-grid {
+
+        display:
+            flex;
+
+        justify-content:
+            space-between;
+
+        gap:
+            30px;
+
+        align-items:
+            center;
+
+    }
+
+
+    .footer-title {
+
+        color:
+            var(--text);
+
+        font-weight:
+            700;
+
+        margin-bottom:
+            5px;
+
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+
+    @media (max-width: 900px) {
+
+        .hero-grid {
+
+            grid-template-columns:
+                1fr;
+
+        }
+
+
+        .cards {
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+        }
+
+
+        .flow {
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+        }
+
+
+        .persona-grid,
+        .rule-grid,
+        .roadmap,
+        .database-layout {
+
+            grid-template-columns:
+                1fr;
+
+        }
+
+
+        .nav-content {
+
+            align-items:
+                flex-start;
+
+            padding:
+                14px 0;
+
+            flex-direction:
+                column;
+
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .container {
+
+            width:
+                min(
+                    100% - 24px,
+                    var(--max-width)
+                );
+
+        }
+
+
+        .hero {
+
+            padding-top:
+                70px;
+
+        }
+
+
+        section {
+
+            padding:
+                70px 0;
+
+        }
+
+
+        .cards,
+        .flow {
+
+            grid-template-columns:
+                1fr;
+
+        }
+
+
+        .hero h1 {
+
+            font-size:
+                46px;
+
+        }
+
+
+        .message {
+
+            max-width:
+                92%;
+
+        }
+
+
+        .diagram-container,
+        .database-diagram {
+
+            padding:
+                18px;
+
+        }
+
+
+        .diagram-container .mermaid,
+        .database-diagram .mermaid {
+
+            min-width:
+                620px;
+
+        }
+
+
+        .footer-grid {
+
+            flex-direction:
+                column;
+
+            align-items:
+                flex-start;
+
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     NAV
+     ===================================================== -->
+
+<nav>
+
+
+<div class="container nav-content">
+
+    <a href="#inicio" class="brand">
+        Bar do <span>Jaum</span>
+    </a>
+
+
+    <div class="nav-links">
+
+        <a href="#inicio">Início</a>
+
+        <a href="#problema">Problema</a>
+
+        <a href="#solucao">Solução</a>
+
+        <a href="#arquitetura">Arquitetura</a>
+
+        <a href="#workflow">Workflow</a>
+
+        <a href="#prd">PRD</a>
+
+        <a href="#specs">SPECs</a>
+        
+        <a href="#adrs">ADRs</a>
+
+
+        <a href="#banco">Banco</a>
+
+        <a href="#human">Human-in-the-Loop</a>
+
+        <a href="#demostracao">Demonstração</a>
+        
+            <a href="#stack">Stack</a>
+
+
+    </div>
+
+</div>
+
+
+</nav>
+
+<main>
+
+
+<!-- =====================================================
+     HERO
+     ===================================================== -->
+
+<section class="hero" id="inicio">
+
+    <div class="container hero-grid">
+
+        <div>
+
+            <div class="eyebrow">
+                Delivery AI Agent
+            </div>
+
+
+            <h1>
+
+                Delivery de bebidas,
+                <span>conversacional.</span>
+
+            </h1>
+
+
+            <p class="hero-description">
+
+                Um agente conversacional para delivery de bebidas,
+                capaz de entender linguagem natural, consultar estoque
+                em tempo real, conduzir pedidos por um workflow
+                determinístico e encaminhar a decisão final para
+                aprovação humana.
+
+            </p>
+
+        </div>
+
+
+        <div class="terminal">
+
+            <div class="terminal-head">
+
+                <span class="terminal-dot"></span>
+
+                <span class="terminal-dot"></span>
+
+                <span class="terminal-dot"></span>
+
+            </div>
+
+
+            <div class="terminal-body">
+
+                <div class="terminal-line">
+
+                    <span class="terminal-key">
+                        channel
+                    </span>
+
+                    <span>
+                        WhatsApp
+                    </span>
+
+                </div>
+
+
+                <div class="terminal-line">
+
+                    <span class="terminal-key">
+                        api
+                    </span>
+
+                    <span>
+                        FastAPI
+                    </span>
+
+                </div>
+
+
+                <div class="terminal-line">
+
+                    <span class="terminal-key">
+                        output
+                    </span>
+
+                    <span>
+                        Structured Output
+                    </span>
+
+                </div>
+
+
+                <div class="terminal-line">
+
+                    <span class="terminal-key">
+                        database
+                    </span>
+
+                    <span>
+                        PostgreSQL
+                    </span>
+
+                </div>
+
+
+                <div class="terminal-line">
+
+                    <span class="terminal-key">
+                        cache
+                    </span>
+
+                    <span>
+                        Redis
+                    </span>
+
+                </div>
+
+
+                <div class="terminal-line">
+
+                    <span class="terminal-key">
+                        workers
+                    </span>
+
+                    <span>
+                        Celery
+                    </span>
+
+                </div>
+
+
+                <div class="terminal-line">
+
+                    <span class="terminal-key">
+                        observability
+                    </span>
+
+                    <span>
+                        Langfuse
+                    </span>
+
+                </div>
+
+
+                <div class="terminal-line">
+
+                    <span class="terminal-key">
+                        supervision
+                    </span>
+
+                    <span>
+                        Human-in-the-Loop
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROBLEMA
+     ===================================================== -->
+
+<section id="problema">
+
+    <div class="container">
+
+        <div class="section-kicker">
+            01 · Problema
+        </div>
+
+
+        <h2 class="section-title">
+            Delivery não é só conversar.
+        </h2>
+
+
+        <p class="section-description">
+
+            Um agente de vendas precisa interpretar mensagens naturais,
+            mas também precisa respeitar regras de negócio, estoque,
+            valores, segurança e supervisão humana.
+
+        </p>
+
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    01
+                </div>
+
+
+                <h3>
+                    Cliente · Linguagem natural
+                </h3>
+
+
+                <p>
+
+                    O cliente pode escrever de diferentes maneiras:
+                    “me vê duas skol”, “manda 2 cervejas” ou combinar
+                    produtos, endereço e pagamento na mesma mensagem.
+
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    02
+                </div>
+
+
+                <h3>
+                    Negócio · Controle de estoque
+                </h3>
+
+
+                <p>
+
+                    Disponibilidade, quantidade, preços e criação do
+                    pedido precisam ser controlados por código e banco
+                    de dados, não pela decisão probabilística do LLM.
+
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    03
+                </div>
+
+
+                <h3>
+                    Segurança · Supervisão humana
+                </h3>
+
+
+                <p>
+
+                    Entradas suspeitas podem interromper o fluxo e pedidos
+                    podem aguardar aprovação humana antes do processamento.
+
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SOLUÇÃO
+     ===================================================== -->
+
+<section id="solucao">
+
+    <div class="container">
+
+        <div class="section-kicker">
+            02 · Solução
+        </div>
+
+
+        <h2 class="section-title">
+            IA para conversar. Código para decidir.
+        </h2>
+
+
+        <p class="section-description">
+
+            O projeto separa interpretação de linguagem natural das regras
+            determinísticas da operação.
+
+        </p>
+
+
+        <div class="rule-grid">
+
+            <article class="rule llm">
+
+                <h3>
+                    LLM
+                </h3>
+
+
+                <ul>
+
+                    <li>
+                        Conversar com o cliente
+                    </li>
+
+                    <li>
+                        Interpretar mensagens
+                    </li>
+
+                    <li>
+                        Extrair intenções e entidades
+                    </li>
+
+                    <li>
+                        Sugerir ações
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule code">
+
+                <h3>
+                    Python / FastAPI
+                </h3>
+
+
+                <ul>
+
+                    <li>
+                        Validar estoque
+                    </li>
+
+                    <li>
+                        Calcular valores
+                    </li>
+
+                    <li>
+                        Aplicar regras de negócio
+                    </li>
+
+                    <li>
+                        Validar pedido
+                    </li>
+
+                    <li>
+                        Executar transações
+                    </li>
+
+                </ul>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PERSONAS
+     ===================================================== -->
+
+<section>
+
+    <div class="container">
+
+        <div class="section-kicker">
+            03 · Personas
+        </div>
+
+
+        <h2 class="section-title">
+            Dois lados da conversa.
+        </h2>
+
+
+        <div class="persona-grid">
+
+            <article class="persona">
+
+                <div class="persona-tag">
+                    Negócio
+                </div>
+
+
+                <h3>
+                    Seu Jaum
+                </h3>
+
+
+                <p>
+
+                    Precisa vender bebidas com segurança, controlar estoque,
+                    acompanhar pedidos e manter uma etapa de aprovação antes
+                    do processamento.
+
+                </p>
+
+            </article>
+
+
+            <article class="persona">
+
+                <div class="persona-tag">
+                    Cliente
+                </div>
+
+
+                <h3>
+                    Cliente final
+                </h3>
+
+
+                <p>
+
+                    Quer simplesmente escrever o que precisa, receber
+                    respostas naturais e concluir o pedido sem navegar
+                    por menus complexos.
+
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ARQUITETURA
+     ===================================================== -->
+
+<section id="arquitetura">
+
+    <div class="container">
+
+        <div class="section-kicker">
+            04 · Arquitetura
+        </div>
+
+
+        <h2 class="section-title">
+            Arquitetura orientada a fluxo.
+        </h2>
+
+
+        <p class="section-description">
+
+            Guardrails protegem a entrada, o classificador interpreta
+            a mensagem e o workflow determinístico coordena handlers,
+            serviços, persistência e tarefas assíncronas.
+
+        </p>
+
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                Arquitetura geral
+            </div>
+
+
+            <div class="mermaid">
+
+
+flowchart TD
+
+C[Cliente] --> API[FastAPI]
+
+API --> G[Guardrails]
+
+G -->|Permitido| NLU[Classifier / NLU]
+
+G -->|Bloqueado| B[Mensagem de segurança]
+
+G -->|Humano| H[Atendimento humano]
+
+NLU --> LLM[LLM]
+
+NLU --> W[Workflow]
+
+W --> HD[Handlers]
+
+HD --> S[Services]
+
+S --> R[Repositories]
+
+R --> DB[(PostgreSQL / Supabase)]
+
+W --> REDIS[(Redis)]
+
+W --> CELERY[Celery]
+
+NLU --> LF[Langfuse]
+
+W --> LF
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     END-TO-END
+     ===================================================== -->
+
+<section>
+
+    <div class="container">
+
+        <div class="section-kicker">
+            05 · End-to-End
+        </div>
+
+
+        <h2 class="section-title">
+            Da mensagem ao pedido concluído.
+        </h2>
+
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                Fluxo completo
+            </div>
+
+
+            <div class="mermaid">
+
+
+flowchart TD
+
+A[Cliente envia mensagem] --> B[Guardrails]
+
+B -->|Bloqueado| C[Retorna mensagem de segurança]
+
+B -->|Humano| D[Encaminha para atendimento humano]
+
+B -->|Permitido| E[Classifier / NLU]
+
+E --> F[Workflow]
+
+F --> G[Consultar produtos]
+
+F --> H[Adicionar / remover itens]
+
+F --> I[Coletar dados de entrega]
+
+F --> J[Coletar pagamento]
+
+G --> F
+
+H --> F
+
+I --> F
+
+J --> K[Validar pedido]
+
+K -->|Dados incompletos| F
+
+K -->|Pedido completo| L[Criar pedido]
+
+L --> M[Aguardar pagamento]
+
+M --> N[Enviar comprovante]
+
+N --> O[Aprovação humana]
+
+O -->|Rejeitado| P[Pedido cancelado]
+
+O -->|Aprovado| Q[Processar pedido]
+
+Q --> R[Pedido concluído]
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     WORKFLOW
+     ===================================================== -->
+
+<section id="workflow">
+
+    <div class="container">
+
+        <div class="section-kicker">
+            05 · Workflow
+        </div>
+
+
+        <h2 class="section-title">
+            Estado explícito, comportamento previsível.
+        </h2>
+
+
+        <p class="section-description">
+
+            O fluxo de atendimento utiliza estados explícitos para evitar
+            decisões imprevisíveis e manter cada etapa sob controle.
+
+        </p>
+
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                Máquina de estados
+            </div>
+
+
+            <div class="mermaid">
+
+
+stateDiagram-v2
+
+[*] --> INITIAL
+
+INITIAL --> COLLECTING_ORDER
+
+COLLECTING_ORDER --> COLLECTING_ORDER
+
+COLLECTING_ORDER --> AWAITING_DELIVERY_DATA
+
+AWAITING_DELIVERY_DATA --> AWAITING_PAYMENT
+
+AWAITING_PAYMENT --> AWAITING_CONFIRMATION
+
+AWAITING_CONFIRMATION --> AWAITING_HUMAN_APPROVAL
+
+AWAITING_CONFIRMATION --> COLLECTING_ORDER
+
+AWAITING_HUMAN_APPROVAL --> COMPLETED
+
+AWAITING_HUMAN_APPROVAL --> CANCELLED
+
+CANCELLED --> [*]
+
+COMPLETED --> [*]
+
+
+            </div>
+
+        </div>
+
+
+        <br><br>
+
+
+        <div class="flow">
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    01
+                </div>
+
+                <h3>
+                    INITIAL
+                </h3>
+
+                <p>
+                    Entrada inicial e identificação do contexto.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    02
+                </div>
+
+                <h3>
+                    COLLECTING_ORDER
+                </h3>
+
+                <p>
+                    Itens são buscados, adicionados ou removidos.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    03
+                </div>
+
+                <h3>
+                    AWAITING_DELIVERY_DATA
+                </h3>
+
+                <p>
+                    Coleta de nome e endereço para entrega.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    04
+                </div>
+
+                <h3>
+                    AWAITING_PAYMENT
+                </h3>
+
+                <p>
+                    Coleta e validação do método de pagamento.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    05
+                </div>
+
+                <h3>
+                    AWAITING_CONFIRMATION
+                </h3>
+
+                <p>
+                    Validação final dos dados e itens do pedido.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    06
+                </div>
+
+                <h3>
+                    AWAITING_HUMAN_APPROVAL
+                </h3>
+
+                <p>
+                    Pedido aguarda decisão humana.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    07
+                </div>
+
+                <h3>
+                    COMPLETED
+                </h3>
+
+                <p>
+                    Pedido aprovado e processado.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    08
+                </div>
+
+                <h3>
+                    CANCELLED
+                </h3>
+
+                <p>
+                    Pedido encerrado sem processamento.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     PRD — DOCUMENTO DE REQUISITOS DE PRODUTO
+     ===================================================== -->
+<section id="prd">
+
+    <div class="container">
+
+        <div class="section-kicker">
+            06 · Product Requirements Document
+        </div>
+
+        <h2 class="section-title">
+            Requisitos que orientam o produto.
+        </h2>
+
+        <p class="section-description">
+            O PRD define o problema de negócio, os objetivos do JaumBot,
+            o escopo do MVP, os requisitos funcionais e não funcionais,
+            as métricas de sucesso, os fluxos operacionais e os princípios
+            que orientam a evolução do produto.
+        </p>
+
+
+        <!-- =================================================
+             01 · VISÃO DO PRODUTO
+             ================================================= -->
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    01
+                </div>
+
+                <h3>
+                    Bar do Jaum
+                </h3>
+
+                <p>
+                    Negócio de delivery de bebidas que busca modernizar
+                    o atendimento mantendo controle operacional,
+                    segurança e previsibilidade.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    02
+                </div>
+
+                <h3>
+                    JaumBot
+                </h3>
+
+                <p>
+                    Agente conversacional de vendas via WhatsApp integrado
+                    a um painel administrativo Web para gerenciamento
+                    dos pedidos e acompanhamento operacional.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    03
+                </div>
+
+                <h3>
+                    Cliente final
+                </h3>
+
+                <p>
+                    Consumidor local que prefere realizar pedidos por
+                    linguagem natural em vez de navegar por filtros
+                    e categorias tradicionais de e-commerce.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             02 · PROBLEMA DE NEGÓCIO
+             ================================================= -->
+
+        <div class="rule-grid">
+
+            <article class="rule llm">
+
+                <h3>
+                    Problema de negócio
+                </h3>
+
+                <ul>
+
+                    <li>
+                        E-commerce tradicional exige navegação por
+                        categorias, filtros e carrinho.
+                    </li>
+
+                    <li>
+                        Clientes frequentemente preferem descrever
+                        diretamente o que desejam.
+                    </li>
+
+                    <li>
+                        O atendimento precisa ser rápido,
+                        simples e conversacional.
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule code">
+
+                <h3>
+                    Controle operacional
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Produtos, preços e estoque devem vir
+                        do catálogo oficial.
+                    </li>
+
+                    <li>
+                        Operações críticas não devem ser executadas
+                        autonomamente pela IA.
+                    </li>
+
+                    <li>
+                        Pedidos devem passar por revisão humana
+                        antes da execução operacional.
+                    </li>
+
+                </ul>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             03 · OBJETIVOS DO PRODUTO
+             ================================================= -->
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    03.01
+                </div>
+
+                <h3>
+                    Atendimento conversacional
+                </h3>
+
+                <p>
+                    Automatizar o atendimento inicial e permitir
+                    pedidos através de linguagem natural.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    03.02
+                </div>
+
+                <h3>
+                    Catálogo confiável
+                </h3>
+
+                <p>
+                    Consultar produtos, preços, categorias,
+                    volumes e estoque diretamente na fonte oficial.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    03.03
+                </div>
+
+                <h3>
+                    Controle humano
+                </h3>
+
+                <p>
+                    Garantir revisão humana antes da execução
+                    de operações críticas do pedido.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    03.04
+                </div>
+
+                <h3>
+                    Gestão operacional
+                </h3>
+
+                <p>
+                    Disponibilizar painel administrativo para
+                    acompanhamento dos pedidos e indicadores de vendas.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             04 · ESCOPO DO MVP
+             ================================================= -->
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                04 · Escopo da versão 1 — MVP
+            </div>
+
+            <div class="mermaid">
+
+flowchart TD
+
+A["Cliente"] --> B["WhatsApp"]
+
+B --> C["POST /whatsapp/webhook"]
+
+C --> D["InputGuardrail"]
+
+D --> E["JaumBot"]
+
+E --> F["Processamento de Linguagem Natural"]
+
+E --> G["Catálogo PostgreSQL"]
+
+E --> H["Montagem do Pedido"]
+
+H --> I["PENDING"]
+
+I --> J["Painel Administrativo"]
+
+J --> K["Revisão Humana"]
+
+K --> L["APPROVED"]
+
+L --> M["OUT_FOR_DELIVERY"]
+
+M --> N["COMPLETED"]
+
+I --> O["CANCELLED"]
+
+L --> O
+
+            </div>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             05 · REQUISITOS FUNCIONAIS
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                05 · Requisitos Funcionais
+            </strong>
+
+        </div>
+
+
+        <div class="flow">
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF01
+                </div>
+
+                <h3>
+                    Receber mensagem
+                </h3>
+
+                <p>
+                    Receber mensagens através do webhook do WhatsApp.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF02
+                </div>
+
+                <h3>
+                    Identificar cliente
+                </h3>
+
+                <p>
+                    Utilizar o telefone para identificar ou criar
+                    a sessão do cliente.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF03
+                </div>
+
+                <h3>
+                    Processar linguagem
+                </h3>
+
+                <p>
+                    Interpretar solicitações realizadas
+                    em linguagem natural.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF04
+                </div>
+
+                <h3>
+                    Consultar catálogo
+                </h3>
+
+                <p>
+                    Consultar produtos antes de informar
+                    preço, estoque ou disponibilidade.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF05
+                </div>
+
+                <h3>
+                    Criar pedido
+                </h3>
+
+                <p>
+                    Transformar a intenção de compra em
+                    um pedido estruturado.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF06
+                </div>
+
+                <h3>
+                    Controlar estado
+                </h3>
+
+                <p>
+                    Manter o estado correspondente à etapa
+                    atual do pedido.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF07
+                </div>
+
+                <h3>
+                    Aprovação humana
+                </h3>
+
+                <p>
+                    Pedidos gerados pelo agente iniciam
+                    no estado PENDING.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF08
+                </div>
+
+                <h3>
+                    Gerenciar pedidos
+                </h3>
+
+                <p>
+                    Consultar detalhes, clientes, itens,
+                    valores e status através do painel.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF09
+                </div>
+
+                <h3>
+                    Consultar histórico
+                </h3>
+
+                <p>
+                    Visualizar o histórico das conversas
+                    relacionadas ao cliente.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF10
+                </div>
+
+                <h3>
+                    Atualizar status
+                </h3>
+
+                <p>
+                    Alterar o status do pedido através
+                    da API administrativa.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF11
+                </div>
+
+                <h3>
+                    Consultar dashboard
+                </h3>
+
+                <p>
+                    Disponibilizar indicadores comerciais
+                    através do painel administrativo.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF12
+                </div>
+
+                <h3>
+                    Filtrar indicadores
+                </h3>
+
+                <p>
+                    Permitir consulta dos indicadores através
+                    de data inicial e data final.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF13
+                </div>
+
+                <h3>
+                    Produtos mais vendidos
+                </h3>
+
+                <p>
+                    Apresentar ranking de produtos por
+                    quantidade vendida e receita gerada.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    RF14
+                </div>
+
+                <h3>
+                    Atualização dos indicadores
+                </h3>
+
+                <p>
+                    Permitir atualização manual dos dados
+                    exibidos no dashboard.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             06 · REQUISITOS NÃO FUNCIONAIS
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                06 · Requisitos Não Funcionais
+            </strong>
+
+        </div>
+
+
+        <div class="rule-grid">
+
+            <article class="rule">
+
+                <h3>
+                    Segurança
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Prompt Injection
+                    </li>
+
+                    <li>
+                        Extração de System Prompt
+                    </li>
+
+                    <li>
+                        Manipulação de contexto
+                    </li>
+
+                    <li>
+                        Solicitações indevidas
+                    </li>
+
+                    <li>
+                        Execuções não autorizadas
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Confiabilidade
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Catálogo oficial como fonte de verdade
+                    </li>
+
+                    <li>
+                        Regras de negócio determinísticas
+                    </li>
+
+                    <li>
+                        Auditoria das operações
+                    </li>
+
+                    <li>
+                        Controle de estados
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Controle de custos
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Minimização de chamadas ao LLM
+                    </li>
+
+                    <li>
+                        Controle do contexto enviado
+                    </li>
+
+                    <li>
+                        Monitoramento de consumo
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Arquitetura
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Monólito Modular
+                    </li>
+
+                    <li>
+                        Router → Service → Repository
+                    </li>
+
+                    <li>
+                        Baixo acoplamento
+                    </li>
+
+                    <li>
+                        Alta coesão
+                    </li>
+
+                </ul>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             07 · HUMAN-IN-THE-LOOP
+             ================================================= -->
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                07 · Human-in-the-Loop
+            </div>
+
+            <div class="mermaid">
+
+flowchart LR
+
+A["Cliente"] --> B["WhatsApp"]
+
+B --> C["JaumBot"]
+
+C --> D["Pedido criado"]
+
+D --> E["PENDING"]
+
+E --> F["Painel Administrativo"]
+
+F --> G["Revisão Humana"]
+
+G -->|"Aprovar"| H["APPROVED"]
+
+G -->|"Rejeitar"| I["CANCELLED"]
+
+H --> J["OUT_FOR_DELIVERY"]
+
+J --> K["COMPLETED"]
+
+            </div>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             08 · MÉTRICAS DE SUCESSO
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                08 · Métricas de Sucesso
+            </strong>
+
+        </div>
+
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    KPI 01
+                </div>
+
+                <h3>
+                    Conversão
+                </h3>
+
+                <p>
+                    Pedidos criados dividido pelo número de
+                    conversas iniciadas, multiplicado por 100.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    KPI 02
+                </div>
+
+                <h3>
+                    TMA
+                </h3>
+
+                <p>
+                    Redução do Tempo Médio de Atendimento
+                    em comparação ao atendimento manual.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    KPI 03
+                </div>
+
+                <h3>
+                    Conformidade comercial
+                </h3>
+
+                <p>
+                    Garantir 100% de conformidade entre
+                    as informações apresentadas pelo agente
+                    e os dados oficiais.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    KPI 04
+                </div>
+
+                <h3>
+                    Segurança operacional
+                </h3>
+
+                <p>
+                    Garantir zero execuções automáticas
+                    irreversíveis sem aprovação humana.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             09 · CONTRATOS DE API
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                09 · Contratos principais da API
+            </strong>
+
+        </div>
+
+
+        <div class="code-block">
+
+<pre>POST /whatsapp/webhook
+
+{
+    "phone": "16999999999",
+    "message": "Quero pedir uma Coca-Cola"
+}
+
+
+GET /admin/orders/
+
+
+PATCH /admin/orders/{order_id}/status
+
+{
+    "status": "OUT_FOR_DELIVERY"
+}
+
+
+GET /admin/dashbord
+
+?start_date=2026-09-01
+&end_date=2026-09-09</pre>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             10 · GESTÃO DE PEDIDOS
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                10 · Gestão de Pedidos
+            </strong>
+
+        </div>
+
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    10.01
+                </div>
+
+                <h3>
+                    Listagem
+                </h3>
+
+                <p>
+                    Visualização dos pedidos existentes
+                    através do painel administrativo.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    10.02
+                </div>
+
+                <h3>
+                    Detalhes
+                </h3>
+
+                <p>
+                    Consulta de cliente, endereço, itens,
+                    valores e forma de pagamento.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    10.03
+                </div>
+
+                <h3>
+                    Status
+                </h3>
+
+                <p>
+                    Atualização do ciclo de vida do pedido
+                    através do painel administrativo.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    10.04
+                </div>
+
+                <h3>
+                    Histórico
+                </h3>
+
+                <p>
+                    Consulta das conversas relacionadas
+                    ao cliente e ao pedido.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             11 · MÁQUINA DE ESTADOS
+             ================================================= -->
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                11 · Máquina de Estados dos Pedidos
+            </div>
+
+            <div class="mermaid">
+
+flowchart TD
+
+A["PENDING"] -->|"Aprovação humana"| B["APPROVED"]
+
+B -->|"Despacho"| C["OUT_FOR_DELIVERY"]
+
+C -->|"Entrega realizada"| D["COMPLETED"]
+
+A -->|"Cancelamento"| E["CANCELLED"]
+
+B -->|"Cancelamento"| E
+
+            </div>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             12 · DASHBOARD ADMINISTRATIVO
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                12 · Dashboard Administrativo
+            </strong>
+
+        </div>
+
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    12.01
+                </div>
+
+                <h3>
+                    Total de pedidos
+                </h3>
+
+                <p>
+                    Quantidade total de pedidos realizados
+                    dentro do período selecionado.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    12.02
+                </div>
+
+                <h3>
+                    Faturamento
+                </h3>
+
+                <p>
+                    Receita total gerada pelos pedidos
+                    dentro do período selecionado.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    12.03
+                </div>
+
+                <h3>
+                    Ticket médio
+                </h3>
+
+                <p>
+                    Valor médio dos pedidos realizados
+                    no período selecionado.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    12.04
+                </div>
+
+                <h3>
+                    Produtos mais vendidos
+                </h3>
+
+                <p>
+                    Ranking dos produtos considerando
+                    quantidade vendida e receita gerada.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             12.05 · FILTRO DE PERÍODO
+             ================================================= -->
+
+        <div class="rule-grid">
+
+            <article class="rule">
+
+                <h3>
+                    Filtro de período
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Data inicial
+                    </li>
+
+                    <li>
+                        Data final
+                    </li>
+
+                    <li>
+                        Seleção manual de datas
+                    </li>
+
+                    <li>
+                        Períodos rápidos
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Períodos rápidos
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Hoje
+                    </li>
+
+                    <li>
+                        7 dias
+                    </li>
+
+                    <li>
+                        30 dias
+                    </li>
+
+                    <li>
+                        Cálculo dinâmico das datas
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Estado dos dados
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Loading
+                    </li>
+
+                    <li>
+                        Erro
+                    </li>
+
+                    <li>
+                        Sem dados
+                    </li>
+
+                    <li>
+                        Última atualização
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Visualizações
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Quantidade vendida
+                    </li>
+
+                    <li>
+                        Receita por produto
+                    </li>
+
+                    <li>
+                        Ranking de produtos
+                    </li>
+
+                    <li>
+                        Indicadores comerciais
+                    </li>
+
+                </ul>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             12.06 · DASHBOARD API
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                API do Dashboard
+            </strong>
+
+        </div>
+
+
+        <div class="code-block">
+
+<pre>GET /admin/dashbord
+
+Parâmetros:
+
+start_date
+end_date
+
+
+Exemplo:
+
+GET /admin/dashbord?start_date=2026-09-01&amp;end_date=2026-09-09
+
+
+Response:
+
+{
+    "sales_summary": {
+        "total_orders": 27,
+        "total_revenue": 663.50,
+        "average_ticket": 24.57
+    },
+
+    "top_products": [
+        {
+            "position": 1,
+            "name": "Heineken",
+            "category": "Cerveja",
+            "volume": "350ml",
+            "total_quantity_sold": 25,
+            "total_revenue_generated": 162.50
+        }
+    ]
+}</pre>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             12.07 · RESPONSIVIDADE
+             ================================================= -->
+
+        <div class="rule-grid">
+
+            <article class="rule">
+
+                <h3>
+                    Desktop
+                </h3>
+
+                <p>
+                    Cards de indicadores organizados horizontalmente
+                    e tabela completa de produtos.
+                </p>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Tablet
+                </h3>
+
+                <p>
+                    Componentes reorganizados de acordo com
+                    o espaço disponível.
+                </p>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Mobile
+                </h3>
+
+                <p>
+                    Cards reorganizados verticalmente e tabela
+                    adaptada para telas menores.
+                </p>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Atualização
+                </h3>
+
+                <p>
+                    O usuário pode atualizar os indicadores
+                    através do botão de atualização.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             13 · ARQUITETURA
+             ================================================= -->
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                13 · Arquitetura do Produto
+            </div>
+
+            <div class="mermaid">
+
+flowchart TD
+
+A["WhatsApp"] --> B["FastAPI Webhook"]
+
+B --> C["Router"]
+
+C --> D["Service"]
+
+D --> E["Repository"]
+
+E --> F[("PostgreSQL / Supabase")]
+
+D --> G["JaumBot"]
+
+G --> H["LLM"]
+
+G --> I["Guardrails"]
+
+D --> J["Order"]
+
+J --> K["PENDING"]
+
+K --> L["Admin Panel"]
+
+L --> M["Human Approval"]
+
+M --> N["APPROVED"]
+
+N --> O["OUT_FOR_DELIVERY"]
+
+O --> P["COMPLETED"]
+
+K --> Q["CANCELLED"]
+
+N --> Q
+
+            </div>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             14 · STACK TECNOLÓGICA
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                14 · Stack Tecnológica
+            </strong>
+
+        </div>
+
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    14.01
+                </div>
+
+                <h3>
+                    Backend
+                </h3>
+
+                <p>
+                    Python 3.11+, FastAPI e API REST.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    14.02
+                </div>
+
+                <h3>
+                    Banco
+                </h3>
+
+                <p>
+                    PostgreSQL através do Supabase,
+                    utilizando o schema delivery.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    14.03
+                </div>
+
+                <h3>
+                    Frontend
+                </h3>
+
+                <p>
+                    HTML5, Tailwind CSS via CDN
+                    e Vanilla JavaScript.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    14.04
+                </div>
+
+                <h3>
+                    Inteligência Artificial
+                </h3>
+
+                <p>
+                    Agente conversacional com guardrails
+                    e controle operacional humano.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             15 · PRINCÍPIOS ARQUITETURAIS
+             ================================================= -->
+
+        <div class="rule-grid">
+
+            <article class="rule">
+
+                <h3>
+                    Separação de responsabilidades
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Router responsável pelo HTTP.
+                    </li>
+
+                    <li>
+                        Service responsável pelas regras de negócio.
+                    </li>
+
+                    <li>
+                        Repository responsável pela persistência.
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Baixo acoplamento
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Módulos independentes.
+                    </li>
+
+                    <li>
+                        Contratos bem definidos.
+                    </li>
+
+                    <li>
+                        Frontend desacoplado do backend.
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Fonte oficial
+                </h3>
+
+                <ul>
+
+                    <li>
+                        PostgreSQL como fonte dos dados comerciais.
+                    </li>
+
+                    <li>
+                        IA não define preços.
+                    </li>
+
+                    <li>
+                        IA não inventa produtos.
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="rule">
+
+                <h3>
+                    Evolução arquitetural
+                </h3>
+
+                <ul>
+
+                    <li>
+                        Monólito Modular inicialmente.
+                    </li>
+
+                    <li>
+                        Evolução conforme necessidade real.
+                    </li>
+
+                    <li>
+                        Evitar complexidade prematura.
+                    </li>
+
+                </ul>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             16 · DOCUMENTAÇÃO DO PROJETO
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                16 · Documentação do Projeto
+            </strong>
+
+        </div>
+
+
+        <div class="code-block">
+
+<pre>/
+
+├── README.md
+├── PRD.md
+├── SPECs.md
+├── ADRs.md
+└── ...</pre>
+
+        </div>
+
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    16.01
+                </div>
+
+                <h3>
+                    README.md
+                </h3>
+
+                <p>
+                    Apresentação do projeto, instalação,
+                    execução, arquitetura e visão geral.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    16.02
+                </div>
+
+                <h3>
+                    PRD.md
+                </h3>
+
+                <p>
+                    Requisitos de produto, objetivos,
+                    escopo e regras funcionais.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    16.03
+                </div>
+
+                <h3>
+                    SPECs.md
+                </h3>
+
+                <p>
+                    Especificações técnicas, contratos
+                    de API, estruturas e implementação.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    16.04
+                </div>
+
+                <h3>
+                    ADRs.md
+                </h3>
+
+                <p>
+                    Registro das decisões arquiteturais
+                    e técnicas do projeto.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             17 · EVOLUÇÃO DO PROJETO
+             ================================================= -->
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                17 · Evolução do Projeto
+            </div>
+
+            <div class="mermaid">
+
+flowchart TD
+
+A["Monólito Modular"]
+
+A --> B["Mais integrações"]
+
+A --> C["Observabilidade"]
+
+A --> D["Métricas avançadas"]
+
+A --> E["Novos canais"]
+
+A --> F["Evolução dos módulos"]
+
+            </div>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             VISÃO FINAL DO PRODUTO
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                Visão do Produto
+            </strong>
+
+        </div>
+
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                Bar do Jaum — JaumBot
+            </div>
+
+            <div class="mermaid">
+
+flowchart TD
+
+A["Cliente"] --> B["WhatsApp"]
+
+B --> C["JaumBot"]
+
+C --> D["Linguagem Natural"]
+
+C --> E["Guardrails"]
+
+C --> F["Catálogo PostgreSQL"]
+
+C --> G["Pedido"]
+
+G --> H["PENDING"]
+
+H --> I["Painel Administrativo"]
+
+I --> J["Human-in-the-Loop"]
+
+J --> K["APPROVED"]
+
+K --> L["OUT_FOR_DELIVERY"]
+
+L --> M["COMPLETED"]
+
+I --> N["Dashboard"]
+
+N --> O["Pedidos"]
+
+N --> P["Faturamento"]
+
+N --> Q["Ticket Médio"]
+
+N --> R["Produtos Mais Vendidos"]
+
+N --> S["Filtros de Período"]
+
+            </div>
+
+        </div>
+
+
+        <br><br>
+
+
+        <!-- =================================================
+             OBJETIVO DO DOCUMENTO
+             ================================================= -->
+
+        <div class="section-description">
+
+            <strong>
+                Objetivo deste Documento
+            </strong>
+
+        </div>
+
+        <p class="section-description">
+
+            Este PRD consolida os requisitos de produto do
+            Bar do Jaum — JaumBot, servindo como referência
+            para desenvolvimento do backend, agente conversacional,
+            painel administrativo, dashboard, persistência de dados,
+            contratos da API, máquina de estados, mecanismos de segurança
+            e Human-in-the-Loop.
+
+        </p>
+
+        <p class="section-description">
+
+            As decisões arquiteturais e técnicas que justificam
+            as escolhas realizadas no projeto devem ser registradas
+            separadamente no arquivo ADRs.md.
+
+        </p>
+
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     ADRs
+     ===================================================== -->
+
+<section id="adrs">
+
+    <div class="container">
+
+        <div class="section-kicker">
+            08 · Decisões arquiteturais
+        </div>
+
+
+        <h2 class="section-title">
+            Arquitetura guiada por decisões.
+        </h2>
+
+
+        <p class="section-description">
+
+            As principais decisões técnicas do projeto são registradas
+            através de Architecture Decision Records (ADRs), documentando
+            o contexto, as alternativas consideradas, a decisão adotada
+            e suas consequências.
+
+        </p>
+
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    ADR 01
+                </div>
+
+
+                <h3>
+                    Monólito Modular
+                </h3>
+
+
+                <p>
+
+                    FastAPI organizado em Router → Service → Repository,
+                    evitando a complexidade prematura de uma arquitetura
+                    baseada em microsserviços.
+
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    ADR 02
+                </div>
+
+
+                <h3>
+                    Catálogo Relacional
+                </h3>
+
+
+                <p>
+
+                    PostgreSQL é a fonte oficial de verdade para produtos,
+                    preços e estoque. O LLM não define valores ou
+                    disponibilidade.
+
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    ADR 03
+                </div>
+
+
+                <h3>
+                    Sessão por Telefone
+                </h3>
+
+
+                <p>
+
+                    A conversa é inicialmente vinculada ao telefone do
+                    cliente e o pedido é associado posteriormente,
+                    permitindo preservar o contexto desde o primeiro contato.
+
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    ADR 04
+                </div>
+
+
+                <h3>
+                    Human-in-the-Loop
+                </h3>
+
+
+                <p>
+
+                    Nenhum pedido é liberado automaticamente. A aprovação
+                    humana é obrigatória antes do processamento operacional.
+
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    ADR 05
+                </div>
+
+
+                <h3>
+                    IA + Código Determinístico
+                </h3>
+
+
+                <p>
+
+                    O LLM interpreta linguagem natural, enquanto Python/FastAPI
+                    controla estoque, preços, regras de negócio e transações.
+
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    ADR 06
+                </div>
+
+
+                <h3>
+                    Workflow Determinístico
+                </h3>
+
+
+                <p>
+
+                    Uma máquina de estados controla as transições do pedido,
+                    reduzindo comportamentos imprevisíveis durante a conversa.
+
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <br><br>
+
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                Princípio arquitetural central
+            </div>
+
+
+            <div class="mermaid">
+
+
+flowchart LR
+
+A[Cliente] --> B[LLM]
+
+B --> C[Interpretação]
+
+C --> D[Workflow Determinístico]
+
+D --> E[Regras de Negócio]
+
+E --> F[(PostgreSQL)]
+
+D --> G[Human-in-the-Loop]
+
+G --> H[Processamento]
+
+
+            </div>
+
+        </div>
+
+
+        <br><br>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SPECIFICATIONS
+     ===================================================== -->
+
+<section id="specs">
+
+ 
+<div class="container">
+
+    <div class="section-kicker">
+        07 · Especificações Técnicas
+    </div>
+
+    <h2 class="section-title">
+        SPECs — Contratos, regras e comportamento.
+    </h2>
+
+    <p class="section-description">
+
+        As especificações técnicas e comportamentais definem os contratos
+        da API, responsabilidades arquiteturais, máquina de estados,
+        regras de negócio e comportamento esperado do Delivery do
+        Bar do Jaum.
+
+    </p>
+
+
+    <!-- =================================================
+         STACK TECNOLÓGICA
+         ================================================= -->
+
+    <div class="cards">
+
+        <article class="card">
+
+            <div class="card-number">
+                01 · BACKEND
+            </div>
+
+            <h3>
+                FastAPI + Python
+            </h3>
+
+            <p>
+                Backend desenvolvido em Python 3.11+, utilizando FastAPI
+                e arquitetura de Monólito Modular.
+            </p>
+
+            <br>
+
+            <div class="code-block">
+ 
+
+<pre>Router
+   ↓
+Service
+   ↓
+Repository</pre>
+
+ 
+            </div>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                02 · DATABASE
+            </div>
+
+            <h3>
+                PostgreSQL + Supabase
+            </h3>
+
+            <p>
+                Persistência relacional utilizando PostgreSQL através
+                da plataforma Supabase.
+            </p>
+
+            <br>
+
+            <p>
+                <strong>Schema:</strong> delivery
+            </p>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                03 · ADMIN
+            </div>
+
+            <h3>
+                Frontend Administrativo
+            </h3>
+
+            <p>
+                HTML5, Tailwind CSS via CDN e Vanilla JavaScript,
+                consumindo exclusivamente os endpoints REST da API.
+            </p>
+
+            <br>
+
+            <p>
+                Sincronização através de polling automático.
+            </p>
+
+        </article>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         REGRA DE OURO
+         ================================================= -->
+
+    <div class="rule-grid">
+
+        <article class="rule llm">
+
+            <h3>
+                🤖 Autoridade do LLM
+            </h3>
+
+            <ul>
+
+                <li>
+                    Conversar com o cliente
+                </li>
+
+                <li>
+                    Interpretar intenções
+                </li>
+
+                <li>
+                    Extrair entidades
+                </li>
+
+                <li>
+                    Sugerir itens
+                </li>
+
+            </ul>
+
+        </article>
+
+
+        <article class="rule code">
+
+            <h3>
+                ⚙️ Autoridade do Código
+            </h3>
+
+            <ul>
+
+                <li>
+                    Consultar estoque
+                </li>
+
+                <li>
+                    Calcular valores
+                </li>
+
+                <li>
+                    Verificar troco
+                </li>
+
+                <li>
+                    Aplicar regras de negócio
+                </li>
+
+                <li>
+                    Registrar transações
+                </li>
+
+            </ul>
+
+        </article>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         CONTRATOS DE API
+         ================================================= -->
+
+    <div class="diagram-container">
+
+        <div class="diagram-title">
+            Contratos principais da API
+        </div>
+
+        <div class="flow">
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    POST
+                </div>
+
+                <h3>
+                    /whatsapp/webhook
+                </h3>
+
+                <p>
+                    Recebe mensagens enviadas pelo cliente através
+                    do WhatsApp.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    GET
+                </div>
+
+                <h3>
+                    /admin/orders/
+                </h3>
+
+                <p>
+                    Retorna os pedidos disponíveis para o painel
+                    administrativo.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    PATCH
+                </div>
+
+                <h3>
+                    /admin/orders/{order_id}/status
+                </h3>
+
+                <p>
+                    Atualiza o status de um pedido.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    REST
+                </div>
+
+                <h3>
+                    API Contract
+                </h3>
+
+                <p>
+                    O frontend administrativo permanece desacoplado
+                    do backend através dos contratos HTTP.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         WEBHOOK
+         ================================================= -->
+
+    <div class="code-block">
+ 
+
+<pre>POST /whatsapp/webhook
+
+{
+    "phone": "16999999999",
+    "message": "Quero pedir uma Coca-Cola"
+}
+
+Response:
+
+{
+    "status": "success",
+    "reply_message": "Fala, campeão! Bem-vindo ao Bar do Jaum..."
+}</pre>
+
+ 
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         CLASSIFIER
+         ================================================= -->
+
+    <div class="diagram-container">
+
+        <div class="diagram-title">
+            Payload estruturado do ClassifierService
+        </div>
+
+        <div class="code-block">
+ 
+
+<pre>{
+    "raw_message": "Sou o Jean. Quero 10 Skol e 1 Guaraná 2L, entrega na Rua das Flores, 123, Centro. Vou pagar no PIX.",
+
+    "intentions": [
+        "provide_name",
+        "add_to_cart",
+        "provide_address",
+        "payment"
+    ],
+
+    "extracted_entities": {
+        "customer_name": "Jean",
+
+        "items": [
+            {
+                "product": "Skol",
+                "quantity": 10
+            },
+            {
+                "product": "Guaraná 2L",
+                "quantity": 1
+            }
+        ],
+
+        "address": "Rua das Flores, 123, Centro",
+
+        "payment_method": "pix"
+    }
+}</pre>
+
+ 
+        </div>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         MÁQUINA DE ESTADOS
+         ================================================= -->
+
+    <div class="diagram-container">
+
+        <div class="diagram-title">
+            Máquina de estados dos pedidos
+        </div>
+
+        <div class="mermaid">
+ 
+
+stateDiagram-v2
+
+[*] --> PENDING
+
+PENDING --> APPROVED : Confirmação
+PENDING --> CANCELLED : Cancelamento
+
+APPROVED --> OUT_FOR_DELIVERY : Despacho
+APPROVED --> CANCELLED : Cancelamento
+
+OUT_FOR_DELIVERY --> COMPLETED : Entrega
+
+COMPLETED --> [*]
+CANCELLED --> [*]
+
+ 
+        </div>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         ESTADOS
+         ================================================= -->
+
+    <div class="cards">
+
+        <article class="card">
+
+            <div class="card-number">
+                PENDING
+            </div>
+
+            <h3>
+                Pedido recebido
+            </h3>
+
+            <p>
+                Pedido aguardando validação ou fechamento do carrinho.
+            </p>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                APPROVED
+            </div>
+
+            <h3>
+                Pedido aprovado
+            </h3>
+
+            <p>
+                Pedido confirmado e aguardando separação pelo operador.
+            </p>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                OUT_FOR_DELIVERY
+            </div>
+
+            <h3>
+                Em entrega
+            </h3>
+
+            <p>
+                Pedido despachado para entrega com o motoboy.
+            </p>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                COMPLETED
+            </div>
+
+            <h3>
+                Finalizado
+            </h3>
+
+            <p>
+                Pedido entregue ao cliente e encerrado com sucesso.
+            </p>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                CANCELLED
+            </div>
+
+            <h3>
+                Cancelado
+            </h3>
+
+            <p>
+                Pedido cancelado pelo cliente ou estabelecimento.
+            </p>
+
+        </article>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         FLUXO ADMINISTRATIVO
+         ================================================= -->
+    <div class="diagram-container">
+
+        <div class="diagram-title">
+            Arquitetura do painel administrativo
+        </div>
+
+        <div class="mermaid">
+
+            flowchart TD
+
+                A["Admin Frontend<br/>HTML5 + Tailwind CSS<br/>Vanilla JavaScript"]
+
+                B["FastAPI Admin<br/>GET /admin/orders/<br/>PATCH /admin/orders/{order_id}/status"]
+
+                C[("PostgreSQL / Supabase<br/>schema: delivery")]
+
+                A -->|"HTTP / REST"| B
+                B --> C
+
+            </div>
+
+        </div>
+
+    <br><br>
+
+
+    <!-- =================================================
+         POLLING
+         ================================================= -->
+
+    <div class="diagram-container">
+
+        <div class="diagram-title">
+            Sincronização automática do painel
+        </div>
+
+        <div class="mermaid">
+ 
+
+flowchart LR
+
+A[Admin Frontend]
+B[GET /admin/orders/]
+C[FastAPI]
+D[(PostgreSQL)]
+E[Dados atualizados]
+F[Atualização da interface]
+
+A --> B
+B --> C
+C --> D
+D --> E
+E --> C
+C --> F
+
+ 
+        </div>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         PRINCÍPIOS
+         ================================================= -->
+
+    <div class="cards">
+
+        <article class="card">
+
+            <div class="card-number">
+                01
+            </div>
+
+            <h3>
+                Separação de responsabilidades
+            </h3>
+
+            <p>
+                Cada camada possui uma responsabilidade específica
+                dentro da aplicação.
+            </p>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                02
+            </div>
+
+            <h3>
+                Baixo acoplamento
+            </h3>
+
+            <p>
+                Módulos independentes e comunicação através de contratos
+                bem definidos.
+            </p>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                03
+            </div>
+
+            <h3>
+                Alta coesão
+            </h3>
+
+            <p>
+                Responsabilidades relacionadas permanecem concentradas
+                dentro de seus respectivos módulos.
+            </p>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                04
+            </div>
+
+            <h3>
+                Business Rules
+            </h3>
+
+            <p>
+                Regras de negócio concentradas nos Services e acesso
+                ao banco concentrado nos Repositories.
+            </p>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                05
+            </div>
+
+            <h3>
+                API REST
+            </h3>
+
+            <p>
+                Backend e frontend administrativo permanecem desacoplados
+                através de contratos HTTP.
+            </p>
+
+        </article>
+
+
+        <article class="card">
+
+            <div class="card-number">
+                06
+            </div>
+
+            <h3>
+                PostgreSQL
+            </h3>
+
+            <p>
+                Persistência relacional utilizando exclusivamente
+                o schema <code>delivery</code>.
+            </p>
+
+        </article>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         RESUMO TÉCNICO
+         ================================================= -->
+
+    <div class="database-info">
+
+        <h3>
+            Resumo técnico
+        </h3>
+
+        <div class="code-block">
+ 
+
+<pre>Backend       → FastAPI
+Linguagem     → Python 3.11+
+Arquitetura   → Monólito Modular
+API           → REST
+Database      → PostgreSQL
+Platform      → Supabase
+Schema        → delivery
+Frontend      → HTML5
+CSS           → Tailwind CSS
+JavaScript    → Vanilla JavaScript
+Sync          → Polling automático
+Layers        → Router → Service → Repository</pre>
+
+ 
+        </div>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         STATUS
+         ================================================= -->
+
+    <div class="rule-grid">
+
+        <article class="rule code">
+
+            <h3>
+                Fluxo principal
+            </h3>
+
+            <p>
+                PENDING → APPROVED → OUT_FOR_DELIVERY → COMPLETED
+            </p>
+
+        </article>
+
+
+        <article class="rule llm">
+
+            <h3>
+                Fluxo de cancelamento
+            </h3>
+
+            <p>
+                PENDING → CANCELLED
+            </p>
+
+            <p>
+                APPROVED → CANCELLED
+            </p>
+
+        </article>
+
+    </div>
+
+
+    <br><br>
+
+
+    <!-- =================================================
+         OBJETIVO DAS SPECS
+         ================================================= -->
+
+    <div class="card">
+
+        <div class="card-number">
+            SPECs
+        </div>
+
+        <h3>
+            Objetivo
+        </h3>
+
+        <p>
+
+            Este documento serve como referência para o desenvolvimento
+            do backend, painel administrativo, contratos da API,
+            regras de negócio, máquina de estados, integração com
+            WhatsApp, persistência dos dados e evolução da arquitetura.
+
+        </p>
+
+        <br>
+
+        <p>
+
+            As decisões arquiteturais que justificam essas escolhas
+            devem ser registradas nos respectivos ADRs do projeto.
+
+        </p>
+
+    </div>
+
+</div>
+ 
+
+</section>
+<!-- =====================================================
+     FIM — SPECIFICATIONS
+     ===================================================== -->
+
+<section id="banco">
+
+    <div class="container">
+
+        <div class="section-kicker">
+            09 · Banco de dados
+        </div>
+
+
+        <h2 class="section-title">
+            Persistência separada por responsabilidade.
+        </h2>
+
+
+        <p class="section-description">
+
+            O schema <code>delivery</code> organiza sessões, catálogo,
+            pedidos, aprovação humana, mensagens e rastreabilidade.
+
+        </p>
+
+
+        <div class="database-layout">
+
+            <div class="database-list">
+
+                <h3>
+                    Schema delivery
+                </h3>
+
+
+                <span class="schema-item">
+                    delivery.customer_sessions
+                </span>
+
+
+                <span class="schema-item">
+                    delivery.products
+                </span>
+
+
+                <span class="schema-item">
+                    delivery.orders
+                </span>
+
+
+                <span class="schema-item">
+                    delivery.order_items
+                </span>
+
+
+                <span class="schema-item">
+                    delivery.order_approvals
+                </span>
+
+
+                <span class="schema-item">
+                    delivery.messages
+                </span>
+
+
+                <span class="schema-item">
+                    delivery.chat_message_history
+                </span>
+
+
+                <span class="schema-item">
+                    delivery.conversation_logs
+                </span>
+
+            </div>
+
+
+            <div class="database-info">
+
+                <h3>
+                    Responsabilidades
+                </h3>
+
+
+                <p>
+
+                    Cada estrutura representa uma responsabilidade
+                    específica dentro da operação do agente.
+
+                </p>
+
+
+                <ul>
+
+                    <li>
+                        Catálogo e disponibilidade de produtos
+                    </li>
+
+                    <li>
+                        Controle de estoque
+                    </li>
+
+                    <li>
+                        Pedidos e itens do pedido
+                    </li>
+
+                    <li>
+                        Aprovação humana
+                    </li>
+
+                    <li>
+                        Histórico de mensagens
+                    </li>
+
+                    <li>
+                        Histórico de chat
+                    </li>
+
+                    <li>
+                        Rastreamento de eventos da conversa
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+
+        <br><br>
+
+
+        <div class="database-diagram">
+
+            <div class="mermaid">
+
+
+erDiagram
+
+PRODUCTS {
+int id PK
+string name
+string description
+string category
+string volume
+decimal price
+int stock_quantity
+boolean is_active
+}
+
+ORDERS {
+string id PK
+string customer_name
+string customer_phone
+string address
+string payment_method
+string status
+decimal total_amount
+datetime created_at
+}
+
+ORDER_ITEMS {
+int id PK
+string order_id FK
+int product_id FK
+int quantity
+decimal unit_price
+decimal subtotal
+}
+
+ORDER_APPROVALS {
+int id PK
+string order_id FK
+string status
+string approved_by
+datetime created_at
+}
+
+MESSAGES {
+int id PK
+string order_id FK
+string role
+text content
+datetime created_at
+}
+
+CHAT_MESSAGE_HISTORY {
+int id PK
+string order_id FK
+string role
+text content
+datetime created_at
+}
+
+CONVERSATION_LOGS {
+int id PK
+string order_id FK
+string event_type
+text payload
+datetime created_at
+}
+
+CUSTOMER_SESSIONS {
+string customer_phone PK
+string current_state
+json items
+string customer_name
+string address
+string payment_method
+string order_id
+datetime expires_at
+}
+
+PRODUCTS ||--o{ ORDER_ITEMS : contains
+
+ORDERS ||--o{ ORDER_ITEMS : contains
+
+ORDERS ||--o{ ORDER_APPROVALS : receives
+
+ORDERS ||--o{ MESSAGES : has
+
+ORDERS ||--o{ CHAT_MESSAGE_HISTORY : stores
+
+ORDERS ||--o{ CONVERSATION_LOGS : generates
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HUMAN IN THE LOOP
+     ===================================================== -->
+
+<section id="human">
+
+    <div class="container">
+
+        <div class="section-kicker">
+            09 · Human-in-the-Loop
+        </div>
+
+
+        <h2 class="section-title">
+            IA conduz. Humano decide.
+        </h2>
+
+
+        <p class="section-description">
+
+            O pedido pode ser criado pelo agente, mas a etapa operacional
+            crítica permanece sob supervisão humana.
+
+        </p>
+
+
+        <div class="diagram-container">
+
+            <div class="diagram-title">
+                Aprovação humana
+            </div>
+
+
+            <div class="mermaid">
+
+
+flowchart LR
+
+A[Cliente] --> B[Agente IA]
+
+B --> C[Pedido criado]
+
+C --> D[Pagamento / comprovante]
+
+D --> E[Painel administrativo]
+
+E -->|Aprovar| F[Processar pedido]
+
+E -->|Rejeitar| G[Cancelar pedido]
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CHAT
+     ===================================================== -->
+<section>
+
+    <div class="container">
+
+        <div class="section-kicker">
+            10 · Experiência
+        </div>
+
+        <h2 class="section-title">
+            Conversa natural, fluxo estruturado.
+        </h2>
+
+        <div class="chat">
+
+            <div class="message client">
+
+                <small>Cliente</small>
+
+                <p>
+                    Boa tarde!
+                </p>
+
+            </div>
+
+
+            <div class="message agent">
+
+                <small>Bar do Jaum · Agente de IA</small>
+
+                <p>
+                    Fala, campeão! Bem-vindo ao Bar do Jaum.
+                    O que vai ser hoje? Manda a braba ou gostaria de
+                    ver quais produtos temos: cervejas, refrigerantes e água.
+                </p>
+
+            </div>
+
+
+            <div class="message client">
+
+                <small>Cliente</small>
+
+                <p>
+                    Gostaria de uma Coca-Cola de 2L.
+                </p>
+
+            </div>
+
+
+            <div class="message agent">
+
+                <small>Bar do Jaum · Agente de IA</small>
+
+                <p>
+                    Anotado! Confira seu pedido até agora:
+                </p>
+
+                <p>
+                    1x Coca-Cola (2L) — R$ 10,00
+                </p>
+
+                <p>
+                    <strong>Total parcial: R$ 10,00</strong>
+                </p>
+
+                <p>
+                    Deseja adicionar mais algum item ao seu pedido
+                    ou podemos avançar?
+                </p>
+
+            </div>
+
+
+            <div class="message client">
+
+                <small>Cliente</small>
+
+                <p>
+                    Podemos avançar.
+                </p>
+
+            </div>
+
+
+            <div class="message agent">
+
+                <small>Bar do Jaum · Agente de IA</small>
+
+                <p>
+                    Perfeito! Para finalizarmos, me informe por favor:
+                    seu <strong>nome</strong>, o <strong>endereço completo</strong>
+                    de entrega e a <strong>forma de pagamento</strong>
+                    (Pix, dinheiro ou cartão).
+                </p>
+
+            </div>
+
+
+            <div class="message client">
+
+                <small>Cliente</small>
+
+                <p>
+                    Meu nome é José. Moro na Rua João Sales, 158, Centro.
+                    Vou pagar no Pix.
+                </p>
+
+            </div>
+
+
+            <div class="message agent">
+
+                <small>Bar do Jaum · Agente de IA</small>
+
+                <p>
+                    Pedido <strong>#267B47AC</strong> criado com sucesso
+                    para <strong>José</strong>!
+                    O total é <strong>R$ 15,00</strong>,
+                    incluindo a taxa de entrega.
+                </p>
+
+                <p>
+                    Nosso Pix para pagamento é:
+                    <strong>jaum1236@delivery.com</strong>
+                </p>
+
+                <p>
+                    Assim que fizer o pagamento, envie o comprovante
+                    por aqui para aprovarmos o seu pedido, meu amigo.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section<!-- =====================================================
+     NLU
+     ===================================================== -->
+
+<section>
+
+    <div class="container">
+
+        <div class="section-kicker">
+            11 · Interpretação
+        </div>
+
+
+        <h2 class="section-title">
+            Linguagem natural convertida em estrutura.
+        </h2>
+
+
+        <p class="section-description">
+
+            O classificador transforma uma mensagem livre em intenções
+            e entidades estruturadas para o workflow.
+
+        </p>
+
+
+        <div class="code-block">
+
+
+<pre>{
+    "raw_message": "Sou o Jean. Quero 10 Skol e 1 Guaraná 2L, entrega na Rua das Flores, 123, Centro. Vou pagar no PIX.",
+
+    "intentions": [
+        "provide_name",
+        "add_to_cart",
+        "provide_address",
+        "payment"
+    ],
+
+    "extracted_entities": {
+        "customer_name": "Jean",
+
+        "items": [
+            {
+                "product": "Skol",
+                "quantity": 10
+            },
+            {
+                "product": "Guaraná 2L",
+                "quantity": 1
+            }
+        ],
+
+        "address": "Rua das Flores, 123, Centro",
+
+        "payment_method": "pix"
+    }
+}</pre>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SEGURANÇA
+     ===================================================== -->
+
+<section>
+
+    <div class="container">
+
+        <div class="section-kicker">
+            12 · Segurança
+        </div>
+
+
+        <h2 class="section-title">
+            Segurança antes da inteligência.
+        </h2>
+
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    01
+                </div>
+
+
+                <h3>
+                    Prompt Injection
+                </h3>
+
+
+                <p>
+
+                    Detecta tentativas de manipular o comportamento
+                    do agente ou substituir suas instruções.
+
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    02
+                </div>
+
+
+                <h3>
+                    Context Exfiltration
+                </h3>
+
+
+                <p>
+
+                    Bloqueia tentativas de obter system prompts,
+                    contexto interno ou informações protegidas.
+
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    03
+                </div>
+
+
+                <h3>
+                    Atendimento humano
+                </h3>
+
+
+                <p>
+
+                    Mensagens que exigem intervenção podem interromper
+                    o fluxo e ser direcionadas para atendimento humano.
+
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     OBSERVABILIDADE
+     ===================================================== -->
+
+<section>
+
+    <div class="container">
+
+        <div class="section-kicker">
+            13 · Observabilidade
+        </div>
+
+
+        <h2 class="section-title">
+            Cada etapa precisa ser observável.
+        </h2>
+
+
+        <div class="flow">
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    01
+                </div>
+
+
+                <h3>
+                    Request
+                </h3>
+
+
+                <p>
+                    Entrada e contexto da requisição.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    02
+                </div>
+
+
+                <h3>
+                    Guardrail
+                </h3>
+
+
+                <p>
+                    Validação e classificação de segurança.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    03
+                </div>
+
+
+                <h3>
+                    Classifier
+                </h3>
+
+
+                <p>
+                    Interpretação estruturada da mensagem.
+                </p>
+
+            </article>
+
+
+            <article class="flow-item">
+
+                <div class="flow-number">
+                    04
+                </div>
+
+
+                <h3>
+                    Workflow
+                </h3>
+
+
+                <p>
+                    Execução determinística das regras.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     DEMONSTRAÇÃO
+     ===================================================== -->
+
+<section id="demonstracao">
+
+    <div class="container">
+
+        <div class="section-kicker">
+            14 · Demonstração
+        </div>
+
+        <h2 class="section-title">
+            Veja o agente em ação.
+        </h2>
+
+        <div class="video-card">
+
+            <iframe
+                src="https://www.youtube.com/embed/kaHyvy7q8kY"
+                title="Demonstração — Bar do Jaum AI Agent"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     STACK
+     ===================================================== -->
+
+<section id="stack">
+
+    <div class="container">
+
+        <div class="section-kicker">
+            15 · Stack
+        </div>
+
+
+        <h2 class="section-title">
+            Stack orientada a produção.
+        </h2>
+
+
+        <div class="cards">
+
+            <article class="card">
+
+                <div class="card-number">
+                    01
+                </div>
+
+
+                <h3>
+                    Python + FastAPI
+                </h3>
+
+
+                <p>
+                    API, serviços, workflow e regras de negócio.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    02
+                </div>
+
+
+                <h3>
+                    LLM + Instructor
+                </h3>
+
+
+                <p>
+                    Interpretação de linguagem natural com saída estruturada.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    03
+                </div>
+
+
+                <h3>
+                    PostgreSQL
+                </h3>
+
+
+                <p>
+                    Persistência de pedidos, produtos, sessões e eventos.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    04
+                </div>
+
+
+                <h3>
+                    Redis
+                </h3>
+
+
+                <p>
+                    Estado temporário, cache e suporte ao processamento.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    05
+                </div>
+
+
+                <h3>
+                    Celery
+                </h3>
+
+
+                <p>
+                    Execução assíncrona de tarefas.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    06
+                </div>
+
+
+                <h3>
+                    Langfuse
+                </h3>
+
+
+                <p>
+                    Observabilidade de chamadas e execução do agente.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    07
+                </div>
+
+
+                <h3>
+                    Docker
+                </h3>
+
+
+                <p>
+                    Ambiente reproduzível para execução dos componentes.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    08
+                </div>
+
+
+                <h3>
+                    Pytest
+                </h3>
+
+
+                <p>
+                    Testes automatizados das regras e componentes.
+                </p>
+
+            </article>
+
+
+            <article class="card">
+
+                <div class="card-number">
+                    09
+                </div>
+
+
+                <h3>
+                    WhatsApp
+                </h3>
+
+
+                <p>
+                    Canal conversacional para interação com o cliente.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer>
+
+
+<div class="container footer-grid">
+
+    <div>
+
+        <div class="footer-title">
+            Bar do Jaum — Delivery AI Agent
+        </div>
+
+
+        <div>
+
+            Projeto de estudo, portfólio e demonstração
+            de arquitetura de AI Agents.
+
+        </div>
+
+    </div>
+
+
+    <div>
+
+        Python · FastAPI · PostgreSQL · Redis · Celery · LLM
+
+    </div>
+
+</div>
+
+
+</footer>
+
+<script>
+
+
+    /* =====================================================
+       MERMAID
+       ===================================================== */
+
+    mermaid.initialize({
+
+        startOnLoad:
+            true,
+
+        securityLevel:
+            "loose",
+
+        theme:
+            "base",
+
+        themeVariables: {
+
+            background:
+                "#101821",
+
+            primaryColor:
+                "#182431",
+
+            secondaryColor:
+                "#182431",
+
+            tertiaryColor:
+                "#182431",
+
+            primaryTextColor:
+                "#ffffff",
+
+            secondaryTextColor:
+                "#ffffff",
+
+            tertiaryTextColor:
+                "#ffffff",
+
+            primaryBorderColor:
+                "#38bdf8",
+
+            lineColor:
+                "#38bdf8",
+
+            clusterBkg:
+                "#182431",
+
+            clusterBorder:
+                "#38bdf8",
+
+            edgeLabelBackground:
+                "#101821",
+
+            nodeBorder:
+                "#38bdf8",
+
+            fontFamily:
+                "Inter, ui-sans-serif, system-ui, sans-serif",
+
+            fontSize:
+                "14px"
+
+        }
+
+    });
+
+
+    /* =====================================================
+       CORES GLOBAIS DO MODELO RELACIONAL
+       ===================================================== */
+
+    const DATABASE_TABLE_COLOR =
+        "#182431";
+
+
+    const DATABASE_LINE_COLOR =
+        "#38bdf8";
+
+
+    const DATABASE_TEXT_COLOR =
+        "#ffffff";
+
+
+    const DATABASE_LABEL_BACKGROUND =
+        "#101821";
+
+
+    /* =====================================================
+       CORRIGE MODELO RELACIONAL
+       ===================================================== */
+
+    function fixDatabaseDiagram() {
+
+        const database =
+            document.querySelector(
+                ".database-diagram"
+            );
+
+
+        if (!database) {
+
+            return;
+
+        }
+
+
+        const svg =
+            database.querySelector(
+                "svg"
+            );
+
+
+        if (!svg) {
+
+            return;
+
+        }
+
+
+        /* =================================================
+           SVG
+           ================================================= */
+
+        svg.style.setProperty(
+            "background",
+            "transparent",
+            "important"
+        );
+
+
+        /* =================================================
+           TODAS AS CAIXAS DAS TABELAS
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".er rect"
+        ).forEach((element) => {
+
+            if (
+                element.classList.contains(
+                    "relationshipLabelBox"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            element.style.setProperty(
+                "fill",
+                DATABASE_TABLE_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "background",
+                DATABASE_TABLE_COLOR,
+                "important"
+            );
+
+        });
+
+
+        /* =================================================
+           ENTITY BOX
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".entityBox"
+        ).forEach((element) => {
+
+            element.style.setProperty(
+                "fill",
+                DATABASE_TABLE_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "background",
+                DATABASE_TABLE_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "stroke",
+                DATABASE_LINE_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "stroke-width",
+                "2px",
+                "important"
+            );
+
+        });
+
+
+        /* =================================================
+           ODD / EVEN / ROW
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".attributeBoxOdd, " +
+            ".attributeBoxEven, " +
+            ".row-rect-odd, " +
+            ".row-rect-even"
+        ).forEach((element) => {
+
+            element.style.setProperty(
+                "fill",
+                DATABASE_TABLE_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "background",
+                DATABASE_TABLE_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "stroke",
+                "none",
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "stroke-width",
+                "0",
+                "important"
+            );
+
+        });
+
+
+        /* =================================================
+           GARANTIA EXTRA PARA TODOS OS RECT
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".er rect:not(.relationshipLabelBox)"
+        ).forEach((element) => {
+
+            element.style.setProperty(
+                "fill",
+                DATABASE_TABLE_COLOR,
+                "important"
+            );
+
+        });
+
+
+        /* =================================================
+           NOME DAS TABELAS
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".entityLabel, " +
+            ".entityLabel text"
+        ).forEach((element) => {
+
+            element.style.setProperty(
+                "fill",
+                DATABASE_TEXT_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "color",
+                DATABASE_TEXT_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "font-weight",
+                "800",
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "opacity",
+                "1",
+                "important"
+            );
+
+        });
+
+
+        /* =================================================
+           TEXTOS DAS COLUNAS
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".attributeLabel, " +
+            ".attributeLabel text, " +
+            ".attributeBoxOdd text, " +
+            ".attributeBoxEven text"
+        ).forEach((element) => {
+
+            element.style.setProperty(
+                "fill",
+                DATABASE_TEXT_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "color",
+                DATABASE_TEXT_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "font-weight",
+                "600",
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "opacity",
+                "1",
+                "important"
+            );
+
+        });
+
+
+        /* =================================================
+           PK / FK
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".key, " +
+            ".keyType"
+        ).forEach((element) => {
+
+            element.style.setProperty(
+                "fill",
+                DATABASE_LINE_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "color",
+                DATABASE_LINE_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "font-weight",
+                "800",
+                "important"
+            );
+
+        });
+
+
+        /* =================================================
+           TODAS AS LINHAS DE RELACIONAMENTO
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".relationshipLine, " +
+            "path.relationshipLine, " +
+            "line.relationshipLine, " +
+            "polyline.relationshipLine"
+        ).forEach((element) => {
+
+            element.style.setProperty(
+                "stroke",
+                DATABASE_LINE_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "stroke-width",
+                "2px",
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "fill",
+                "none",
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "opacity",
+                "1",
+                "important"
+            );
+
+        });
+
+
+        /* =================================================
+           RELACIONAMENTOS GERADOS COMO PATH
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".er path"
+        ).forEach((element) => {
+
+            const className =
+                element.getAttribute(
+                    "class"
+                ) || "";
+
+
+            if (
+                className.includes(
+                    "relationship"
+                )
+            ) {
+
+                element.style.setProperty(
+                    "stroke",
+                    DATABASE_LINE_COLOR,
+                    "important"
+                );
+
+
+                element.style.setProperty(
+                    "stroke-width",
+                    "2px",
+                    "important"
+                );
+
+
+                element.style.setProperty(
+                    "fill",
+                    "none",
+                    "important"
+                );
+
+            }
+
+        });
+
+
+        /* =================================================
+           CARDINALIDADES
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".relationshipLabel, " +
+            ".relationshipLabel text"
+        ).forEach((element) => {
+
+            element.style.setProperty(
+                "fill",
+                DATABASE_TEXT_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "color",
+                DATABASE_TEXT_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "opacity",
+                "1",
+                "important"
+            );
+
+        });
+
+
+        /* =================================================
+           CAIXA DO LABEL DA RELAÇÃO
+           ================================================= */
+
+        svg.querySelectorAll(
+            ".relationshipLabelBox"
+        ).forEach((element) => {
+
+            element.style.setProperty(
+                "fill",
+                DATABASE_LABEL_BACKGROUND,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "stroke",
+                DATABASE_LINE_COLOR,
+                "important"
+            );
+
+
+            element.style.setProperty(
+                "stroke-width",
+                "1px",
+                "important"
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       CENTRALIZAÇÃO DOS DIAGRAMAS
+       ===================================================== */
+
+    function centerMermaidDiagrams() {
+
+        const diagrams =
+            document.querySelectorAll(
+                ".diagram-container .mermaid, " +
+                ".database-diagram .mermaid"
+            );
+
+
+        diagrams.forEach((diagram) => {
+
+            diagram.style.setProperty(
+                "width",
+                "fit-content",
+                "important"
+            );
+
+
+            diagram.style.setProperty(
+                "margin-left",
+                "auto",
+                "important"
+            );
+
+
+            diagram.style.setProperty(
+                "margin-right",
+                "auto",
+                "important"
+            );
+
+
+            const svg =
+                diagram.querySelector(
+                    "svg"
+                );
+
+
+            if (svg) {
+
+                svg.style.setProperty(
+                    "display",
+                    "block",
+                    "important"
+                );
+
+
+                svg.style.setProperty(
+                    "margin-left",
+                    "auto",
+                    "important"
+                );
+
+
+                svg.style.setProperty(
+                    "margin-right",
+                    "auto",
+                    "important"
+                );
+
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       APLICA TODAS AS CORREÇÕES
+       ===================================================== */
+
+    function applyDiagramFixes() {
+
+        fixDatabaseDiagram();
+
+        centerMermaidDiagrams();
+
+    }
+
+
+    /* =====================================================
+       EXECUÇÃO APÓS MERMAID
+       ===================================================== */
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            setTimeout(
+                applyDiagramFixes,
+                300
+            );
+
+
+            setTimeout(
+                applyDiagramFixes,
+                700
+            );
+
+
+            setTimeout(
+                applyDiagramFixes,
+                1200
+            );
+
+
+            setTimeout(
+                applyDiagramFixes,
+                2000
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       OBSERVA ALTERAÇÕES DO MERMAID
+       ===================================================== */
+
+    const observer =
+        new MutationObserver(
+            () => {
+
+                applyDiagramFixes();
+
+            }
+        );
+
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            const database =
+                document.querySelector(
+                    ".database-diagram"
+                );
+
+
+            if (database) {
+
+                observer.observe(
+                    database,
+                    {
+                        childList:
+                            true,
+
+                        subtree:
+                            true
+                    }
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+</body>
+
+</html>
